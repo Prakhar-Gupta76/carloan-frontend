@@ -1,0 +1,39 @@
+import { apiClient } from './client';
+
+export async function generateOTP(mobileNumber) {
+  const response = await apiClient.post('/api/v1/generateOTP', {
+    mobile_number: mobileNumber
+  });
+
+  return response.data;
+}
+
+export async function verifyOTP(mobileNumber, otp) {
+  const response = await apiClient.get('/api/v1/verifyOTP', {
+    data: {
+      mobile_number: mobileNumber,
+      otp: Number(otp)
+    }
+  });
+
+  return response.data;
+}
+
+export async function getUser(mobileNumber) {
+  const response = await apiClient.get('/api/v1/user', {
+    data: {
+      mobile_number: mobileNumber
+    }
+  });
+
+  return response.data;
+}
+
+export async function saveUser(mobileNumber, name) {
+  const response = await apiClient.post('/api/v1/saveUser', {
+    mobile_number: mobileNumber,
+    name
+  });
+
+  return response.data;
+}

@@ -1,0 +1,24 @@
+{
+  "name": "car-loan-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@emotion/cache": "latest",
+    "@emotion/react": "latest",
+    "@emotion/styled": "latest",
+    "@mui/material": "latest",
+    "@reduxjs/toolkit": "latest",
+    "axios": "latest",
+    "next": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "react-redux": "latest",
+    "zod": "latest"
+  },
+  "devDependencies": {}
+}
