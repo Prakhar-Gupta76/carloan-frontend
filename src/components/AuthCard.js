@@ -27,82 +27,6 @@ const CARD_TITLES = {
   name: 'Enter name'
 };
 
-function getNestedValue(data, keys) {
-  for (const key of keys) {
-    const value = key.split('.').reduce((current, segment) => current?.[segment], data);
-    if (value !== undefined && value !== null) {
-      return value;
-    }
-  }
-
-  return undefined;
-}
-
-function isOtpVerified(data) {
-  const status = getNestedValue(data, ['status', 'data.status', 'result.status']);
-  return String(status).toLowerCase() === 'verified';
-}
-
-function isNewUserResponse(data) {
-  const explicitFlag = getNestedValue(data, [
-    'is_new_user',
-    'isNewUser',
-    'new_user',
-    'data.is_new_user',
-    'data.isNewUser',
-    'data.new_user'
-  ]);
-
-  if (typeof explicitFlag === 'boolean') {
-    return explicitFlag;
-  }
-
-  const userExists = getNestedValue(data, [
-    'user_exists',
-    'userExists',
-    'data.user_exists',
-    'data.userExists'
-  ]);
-
-  if (typeof userExists === 'boolean') {
-    return !userExists;
-  }
-
-  const status = String(
-    getNestedValue(data, ['status', 'data.status', 'result.status']) || ''
-  ).toLowerCase();
-
-  if (['new', 'new_user', 'not_found'].includes(status)) {
-    return true;
-  }
-
-  if (getNestedValue(data, ['user', 'data.user', 'result.user'])) {
-    return false;
-  }
-
-  return false;
-}
-
-function isOkResponse(data) {
-  const status = getNestedValue(data, ['status', 'data.status', 'result.status']);
-
-  if (!status) {
-    return true;
-  }
-
-  return ['ok', 'success', 'saved'].includes(String(status).toLowerCase());
-}
-
-function normalizeUser(data, fallbackMobile, fallbackName = '') {
-  const user = getNestedValue(data, ['user', 'data.user', 'result.user']) || data || {};
-
-  return {
-    ...user,
-    mobile_number: user.mobile_number || user.mobileNumber || fallbackMobile,
-    name: user.name || fallbackName
-  };
-}
-
 export default function AuthCard() {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -153,19 +77,19 @@ export default function AuthCard() {
     try {
       const verification = await verifyOTP(mobileNumber, otpInput);
 
-      if (!isOtpVerified(verification)) {
+      if (verification?.data[0].status !== "valid") {
         setError('OTP could not be verified.');
         return;
       }
 
       const userResponse = await getUser(mobileNumber);
 
-      if (isNewUserResponse(userResponse)) {
+      if (userResponse.data.length === 0) {
         setStep('name');
         return;
       }
 
-      dispatch(setUser(normalizeUser(userResponse, mobileNumber)));
+      dispatch(setUser(userResponse.data[0]));
       router.push('/dashboard');
     } catch (apiError) {
       setError(apiError.message);
@@ -185,12 +109,11 @@ export default function AuthCard() {
     try {
       const response = await saveUser(mobileNumber, nameInput.trim());
 
-      if (!isOkResponse(response)) {
+      if (response.status !== "ok") {
         setError('User could not be saved.');
         return;
       }
 
-      dispatch(setUser(normalizeUser(response, mobileNumber, nameInput.trim())));
       router.push('/dashboard');
     } catch (apiError) {
       setError(apiError.message);

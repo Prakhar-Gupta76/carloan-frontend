@@ -9,21 +9,17 @@ export async function generateOTP(mobileNumber) {
 }
 
 export async function verifyOTP(mobileNumber, otp) {
-  const response = await apiClient.get('/api/v1/verifyOTP', {
-    data: {
-      mobile_number: mobileNumber,
-      otp: Number(otp)
-    }
+  const response = await apiClient.post('/api/v1/verifyOTP', {
+    mobile_number: mobileNumber,
+    otp: Number(otp)
   });
 
   return response.data;
 }
 
 export async function getUser(mobileNumber) {
-  const response = await apiClient.get('/api/v1/user', {
-    data: {
-      mobile_number: mobileNumber
-    }
+  const response = await apiClient.post('/api/v1/user', {
+    mobile_number: mobileNumber
   });
 
   return response.data;
