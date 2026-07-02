@@ -90,7 +90,7 @@ export default function AuthCard() {
       }
 
       dispatch(setUser(userResponse.data[0]));
-      router.push('/dashboard');
+      router.push('/loan-applicant-details');
     } catch (apiError) {
       setError(apiError.message);
     } finally {
@@ -107,14 +107,21 @@ export default function AuthCard() {
     setError('');
 
     try {
-      const response = await saveUser(mobileNumber, nameInput.trim());
+      const response = await saveUser({
+        mobile_number: mobileNumber,
+        name: nameInput.trim()
+      });
 
       if (response.status !== "ok") {
         setError('User could not be saved.');
         return;
       }
 
-      router.push('/dashboard');
+      if (response?.data?.[0]) {
+        dispatch(setUser(response.data[0]));
+      }
+
+      router.push('/loan-applicant-details');
     } catch (apiError) {
       setError(apiError.message);
     } finally {

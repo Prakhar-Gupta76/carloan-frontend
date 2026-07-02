@@ -25,11 +25,8 @@ export async function getUser(mobileNumber) {
   return response.data;
 }
 
-export async function saveUser(mobileNumber, name) {
-  const response = await apiClient.post('/api/v1/saveUser', {
-    mobile_number: mobileNumber,
-    name
-  });
+export async function saveUser(payload) {
+  const response = await apiClient.post('/api/v1/saveUser', payload);
 
   return response.data;
 }
