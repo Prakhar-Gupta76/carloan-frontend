@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import {
   Alert,
   Box,
@@ -29,6 +30,7 @@ const initialFormValues = {
 };
 
 export default function LoanApplicantDetailsPage() {
+  const router = useRouter();
   const dispatch = useDispatch();
   const { mobileNumber, user } = useSelector((state) => state.auth);
 
@@ -130,6 +132,7 @@ export default function LoanApplicantDetailsPage() {
         message: 'Applicant details saved.',
         severity: 'success'
       });
+      router.push('/quotes');
     } catch (apiError) {
       setSnackbar({
         open: true,

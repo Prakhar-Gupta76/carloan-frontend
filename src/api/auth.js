@@ -30,3 +30,9 @@ export async function saveUser(payload) {
 
   return response.data;
 }
+
+export async function getQuotes(payload) {
+  const response = await apiClient.post('/api/v1/getQuotes', payload);
+
+  return response.data;
+}
