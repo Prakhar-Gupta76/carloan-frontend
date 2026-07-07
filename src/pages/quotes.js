@@ -5,8 +5,10 @@ import {
   Backdrop,
   Box,
   Button,
+  Checkbox,
   CircularProgress,
   Container,
+  FormControlLabel,
   Paper,
   Snackbar,
   Stack,
@@ -15,7 +17,8 @@ import {
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { getQuotes, getUser, saveUser } from '@/api/auth';
+import { getQuotes, getUser, saveUser, verifyDetails } from '@/api/auth';
+import ConsentText from '@/components/ConsentText';
 import { setUser } from '@/redux/slices/authSlice';
 
 const initialFilters = {
@@ -40,6 +43,7 @@ export default function QuotesPage() {
   const [loadingUser, setLoadingUser] = useState(false);
   const [loadingQuotes, setLoadingQuotes] = useState(false);
   const [selectedQuote, setSelectedQuote] = useState(null);
+  const [consentAccepted, setConsentAccepted] = useState(false);
   const [savingBank, setSavingBank] = useState('');
   const [snackbar, setSnackbar] = useState({
     open: false,
@@ -152,6 +156,7 @@ export default function QuotesPage() {
         loan_tenure: filters.loan_tenure
       });
 
+      setConsentAccepted(false);
       setSelectedQuote(quote);
     } catch (apiError) {
       setSnackbar({
@@ -162,6 +167,19 @@ export default function QuotesPage() {
     } finally {
       setSavingBank('');
     }
+  };
+
+  const handleConsentSubmit = async () => {
+    if (!requestMobileNumber) {
+      setSnackbar({
+        open: true,
+        message: 'Mobile number is missing. Please complete OTP verification again.',
+        severity: 'error'
+      });
+      return;
+    }
+
+    await verifyDetails(requestMobileNumber);
   };
 
   const closeSnackbar = () => {
@@ -334,12 +352,64 @@ export default function QuotesPage() {
         <Paper
           elevation={0}
           sx={{
+            display: 'flex',
+            flexDirection: 'column',
             borderRadius: 1,
-            height: 220,
-            maxWidth: 'calc(100vw - 32px)',
-            width: 420
+            height: '70vh',
+            overflow: 'hidden',
+            width: { xs: 'calc(100vw - 32px)', md: '30vw' }
           }}
-        />
+        >
+          <Box
+            sx={{
+              flex: 1,
+              overflowY: 'auto',
+              p: 2.5
+            }}
+          >
+            <Stack spacing={2}>
+              <ConsentText />
+
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={consentAccepted}
+                    onChange={(event) => setConsentAccepted(event.target.checked)}
+                  />
+                }
+                label={
+                  <Typography color="text.primary" fontWeight={700} variant="body2">
+                    I have read and understood the above and voluntarily consent
+                    to the retrieval and verification of my financial and
+                    employment information for the purpose of processing my car
+                    loan application.
+                  </Typography>
+                }
+                sx={{ alignItems: 'flex-start', m: 0 }}
+              />
+            </Stack>
+          </Box>
+
+          <Box
+            sx={{
+              backgroundColor: 'background.paper',
+              borderTop: '1px solid',
+              borderColor: 'divider',
+              bottom: 0,
+              p: 2,
+              position: 'sticky'
+            }}
+          >
+            <Button
+              disabled={!consentAccepted}
+              fullWidth
+              onClick={handleConsentSubmit}
+              variant="contained"
+            >
+              I Agree
+            </Button>
+          </Box>
+        </Paper>
       </Backdrop>
 
       <Snackbar

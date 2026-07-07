@@ -36,3 +36,9 @@ export async function getQuotes(payload) {
 
   return response.data;
 }
+
+export async function verifyDetails(mobileNumber) {
+  await apiClient.post('/api/v1/verifyDetails', {
+    mobile_number: mobileNumber
+  });
+}
