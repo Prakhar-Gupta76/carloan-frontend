@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import {
   Alert,
   Backdrop,
@@ -34,6 +35,7 @@ const currencyFormatter = new Intl.NumberFormat('en-IN', {
 });
 
 export default function QuotesPage() {
+  const router = useRouter();
   const dispatch = useDispatch();
   const { mobileNumber, user } = useSelector((state) => state.auth);
 
@@ -180,6 +182,7 @@ export default function QuotesPage() {
     }
 
     await verifyDetails(requestMobileNumber);
+    router.push('/additional-details');
   };
 
   const closeSnackbar = () => {

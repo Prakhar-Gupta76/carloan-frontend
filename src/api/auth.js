@@ -31,6 +31,16 @@ export async function saveUser(payload) {
   return response.data;
 }
 
+export async function saveDrivingLicense(payload) {
+  const response = await apiClient.post('/api/v1/saveDrivingLicense', payload, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  });
+
+  return response.data;
+}
+
 export async function getQuotes(payload) {
   const response = await apiClient.post('/api/v1/getQuotes', payload);
 
@@ -41,4 +51,20 @@ export async function verifyDetails(mobileNumber) {
   await apiClient.post('/api/v1/verifyDetails', {
     mobile_number: mobileNumber
   });
+}
+
+export async function verifyDOB({ mobileNumber, documentType, documentFile }) {
+  const formData = new FormData();
+
+  formData.append('mobile_number', mobileNumber);
+  formData.append('document_type', documentType);
+  formData.append('document_file', documentFile);
+
+  const response = await apiClient.post('/api/v1/verifyDOB', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  });
+
+  return response.data;
 }
