@@ -21,18 +21,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getQuotes, getUser, saveUser, verifyDetails } from '@/api/auth';
 import ConsentText from '@/components/ConsentText';
 import { setUser } from '@/redux/slices/authSlice';
+import { formatCurrency } from '@/utils/formatters';
 
 const initialFilters = {
   salary: 0,
   loan_amount: 0,
   loan_tenure: 0
 };
-
-const currencyFormatter = new Intl.NumberFormat('en-IN', {
-  style: 'currency',
-  currency: 'INR',
-  maximumFractionDigits: 2
-});
 
 export default function QuotesPage() {
   const router = useRouter();
@@ -132,7 +127,8 @@ export default function QuotesPage() {
 
   const getNumberValue = (field) => (filters[field] === 0 ? '' : filters[field]);
 
-  const formatCurrency = (value) => currencyFormatter.format(Number(value || 0));
+  const formatQuoteCurrency = (value) =>
+    formatCurrency(value || 0, { maximumFractionDigits: 2 });
 
   const loanTenureText = filters.loan_tenure
     ? `${filters.loan_tenure} ${filters.loan_tenure === 1 ? 'year' : 'years'}`
@@ -155,7 +151,8 @@ export default function QuotesPage() {
         mobile_number: requestMobileNumber,
         salary: filters.salary,
         loan_amount: filters.loan_amount,
-        loan_tenure: filters.loan_tenure
+        loan_tenure: filters.loan_tenure,
+        loan_monthly_emi: quote.monthly_emi
       });
 
       setConsentAccepted(false);
@@ -322,7 +319,7 @@ export default function QuotesPage() {
                               sx={{ mr: 1 }}
                             />
                           ) : null}
-                          {formatCurrency(quote.monthly_emi)}
+                          {formatQuoteCurrency(quote.monthly_emi)}
                         </Button>
                       </Box>
 
@@ -330,7 +327,7 @@ export default function QuotesPage() {
                         Interest Rate: {quote.interest_rate}% p.a.
                       </Typography>
                       <Typography color="text.secondary">
-                        Loan Amount: {formatCurrency(filters.loan_amount)}
+                        Loan Amount: {formatQuoteCurrency(filters.loan_amount)}
                       </Typography>
                       <Typography color="text.secondary">
                         Loan Tenure: {loanTenureText}
