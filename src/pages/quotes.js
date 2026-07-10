@@ -152,7 +152,9 @@ export default function QuotesPage() {
         salary: filters.salary,
         loan_amount: filters.loan_amount,
         loan_tenure: filters.loan_tenure,
-        loan_monthly_emi: quote.monthly_emi
+        loan_monthly_emi: quote.monthly_emi,
+        loan_bank: quote.bank,
+        loan_interest_rate: quote.interest_rate
       });
 
       setConsentAccepted(false);
