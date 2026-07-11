@@ -1,6 +1,6 @@
 const NOT_FOUND_STATUS = 'not found';
 const CREDIT_TYPE = 'CREDIT';
-const SALARY_DESCRIPTION_PREFIX = 'Salary credited';
+const SALARY_DESCRIPTION_PREFIX = 'salary credited';
 
 function normalizeText(value) {
   return String(value || '').trim().toLowerCase();
