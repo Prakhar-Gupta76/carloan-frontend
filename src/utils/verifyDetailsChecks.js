@@ -139,7 +139,7 @@ export function getVerifyDetailsChecks(user) {
 
   const currentCompanyDurationPassed =
     Boolean(currentCompanyDuration) &&
-    currentCompanyDuration >= topCompanyFrequency &&
+    currentCompanyDuration <= topCompanyFrequency &&
     hasSameCompanyForTopDuration(pfCredits, currentCompanyDuration);
 
   checks.push(
