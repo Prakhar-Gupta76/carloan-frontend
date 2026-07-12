@@ -99,18 +99,19 @@ export default function VerifyDetailsPage() {
 
   const verificationResult = getVerifyDetailsChecks(user);
   const failedChecks = verificationResult.failedChecks ?? [];
+  const firstFailedCheckMessage = failedChecks[0]?.message || '';
 
   useEffect(() => {
-    if (loadingUser || !user || failedChecks.length === 0) {
+    if (loadingUser || !user || !firstFailedCheckMessage) {
       return;
     }
 
     setSnackbar({
       open: true,
-      message: failedChecks[0].message,
+      message: firstFailedCheckMessage,
       severity: 'error'
     });
-  }, [failedChecks, loadingUser, user]);
+  }, [firstFailedCheckMessage, loadingUser, user]);
 
   const detailItems = [
     {
