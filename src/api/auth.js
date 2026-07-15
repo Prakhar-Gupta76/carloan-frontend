@@ -68,3 +68,9 @@ export async function verifyDOB({ mobileNumber, documentType, documentFile }) {
 
   return response.data;
 }
+
+export async function pay(payload) {
+  const response = await apiClient.post('/api/v1/pay', payload);
+
+  return response.data;
+}

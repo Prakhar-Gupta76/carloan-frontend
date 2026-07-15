@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import {
   Alert,
   Box,
@@ -53,6 +54,7 @@ function DetailRow({ label, value }) {
 }
 
 export default function VerifyDetailsPage() {
+  const router = useRouter();
   const dispatch = useDispatch();
   const { mobileNumber, user } = useSelector((state) => state.auth);
   const requestMobileNumber = mobileNumber || user?.mobile_number || '';
@@ -304,6 +306,7 @@ export default function VerifyDetailsPage() {
                       !requestMobileNumber ||
                       !verificationResult.allChecksPassed
                     }
+                    onClick={() => router.push('/review-details-pay')}
                     sx={{ alignSelf: 'center', minWidth: 240 }}
                     variant="contained"
                   >

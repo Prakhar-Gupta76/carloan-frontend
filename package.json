@@ -19,6 +19,5 @@
     "react-dom": "latest",
     "react-redux": "latest",
     "zod": "latest"
-  },
-  "devDependencies": {}
+  }
 }
