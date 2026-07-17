@@ -1,16 +1,55 @@
 import {
-  Box,
   Paper,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
-  TableRow,
-  Typography
+  TableRow
 } from '@mui/material';
 
-const columns = ['Customer Name', 'Mobile Number', 'Status'];
+const bankInterestRates = [
+  {
+    bank: 'HDFC Bank',
+    interestRate: '8%-10%'
+  },
+  {
+    bank: 'Punjab National Bank',
+    interestRate: '8%-9%'
+  },
+  {
+    bank: 'ICICI Bank',
+    interestRate: '8%-9.5%'
+  },
+  {
+    bank: 'Axis Bank',
+    interestRate: '9%-11%'
+  },
+  {
+    bank: 'State Bank of India',
+    interestRate: '7%-9%'
+  },
+  {
+    bank: 'Punjab & Sindh Bank',
+    interestRate: '8%-10%'
+  },
+  {
+    bank: 'Kotak Mahindra Bank',
+    interestRate: '9%-10.5%'
+  },
+  {
+    bank: 'Indusland Bank',
+    interestRate: '8%-10%'
+  },
+  {
+    bank: 'Union Bank of India',
+    interestRate: '8%-9.5%'
+  },
+  {
+    bank: 'Indusland Bank',
+    interestRate: '8%-9%'
+  }
+];
 
 export default function LeadTable() {
   return (
@@ -24,10 +63,10 @@ export default function LeadTable() {
         overflow: 'hidden'
       }}
     >
-      <Table aria-label="customer leads table">
+      <Table aria-label="bank interest rates table">
         <TableHead>
           <TableRow sx={{ backgroundColor: 'primary.main' }}>
-            {columns.map((column) => (
+            {['S.No.', 'Bank', 'Interest Rates'].map((column) => (
               <TableCell
                 key={column}
                 sx={{
@@ -42,24 +81,13 @@ export default function LeadTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          <TableRow>
-            <TableCell colSpan={columns.length} sx={{ p: 0, borderBottom: 0 }}>
-              <Box
-                sx={{
-                  alignItems: 'center',
-                  backgroundColor: 'background.paper',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  minHeight: { xs: 220, md: 420 },
-                  px: 2
-                }}
-              >
-                <Typography color="text.secondary" variant="body2">
-                  No records available.
-                </Typography>
-              </Box>
-            </TableCell>
-          </TableRow>
+          {bankInterestRates.map((bankInterestRate, index) => (
+            <TableRow key={bankInterestRate.bank}>
+              <TableCell>{index + 1}</TableCell>
+              <TableCell>{bankInterestRate.bank}</TableCell>
+              <TableCell>{bankInterestRate.interestRate}</TableCell>
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     </TableContainer>
